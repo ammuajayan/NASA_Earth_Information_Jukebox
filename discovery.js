@@ -1,4 +1,6 @@
+
 // discovery.js - NASA/NOAA Datasets, Sonification & CD Player Audio Controls
+
 const nasaEvents = [
   {
     id: 0,
@@ -56,82 +58,154 @@ const nasaEvents = [
   }
 ];
 
+// Audio state
 let isPlaying = false;
 let audioCtx = null;
 let activeOscillators = [];
 let masterVolume = 0.7;
 let narrationSpeed = 1.0;
 
+// Play an individual scientific tone
 function playTone(freq) {
   try {
     const tempCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    if (tempCtx.state === "suspended") {
+      tempCtx.resume();
+    }
+
     const osc = tempCtx.createOscillator();
     const gain = tempCtx.createGain();
+
     osc.type = "sine";
     osc.frequency.setValueAtTime(freq, tempCtx.currentTime);
+
     gain.gain.setValueAtTime(0.001, tempCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(masterVolume * 0.1, tempCtx.currentTime + 0.1);
-    gain.gain.exponentialRampToValueAtTime(0.001, tempCtx.currentTime + 1.2);
+    gain.gain.exponentialRampToValueAtTime(
+      Math.max(0.001, masterVolume * 0.1),
+      tempCtx.currentTime + 0.1
+    );
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      tempCtx.currentTime + 1.2
+    );
+
     osc.connect(gain);
     gain.connect(tempCtx.destination);
+
     osc.start();
     osc.stop(tempCtx.currentTime + 1.2);
-  } catch(e) {}
+
+    osc.onended = () => tempCtx.close();
+
+  } catch (error) {
+    console.error("Tone playback error:", error);
+  }
 }
 
+// Text narration
 function speakText(text) {
   if (!("speechSynthesis" in window)) return;
+
   window.speechSynthesis.cancel();
+
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 1.0;
+  utterance.rate = narrationSpeed;
   utterance.pitch = 1.05;
+
   window.speechSynthesis.speak(utterance);
 }
-window.speakText = speakText;
 
+// Play selected event narration and musical tones
 function playMelodiousNarration(ev) {
+  if (!ev) return;
+
   stopMelodiousAudio();
+
   isPlaying = true;
   updatePlayerUI(true);
 
   try {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+
     const masterGain = audioCtx.createGain();
+
     masterGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-    masterGain.gain.exponentialRampToValueAtTime(masterVolume * 0.08, audioCtx.currentTime + 1.5);
+    masterGain.gain.exponentialRampToValueAtTime(
+      Math.max(0.001, masterVolume * 0.08),
+      audioCtx.currentTime + 1.5
+    );
+
     masterGain.connect(audioCtx.destination);
 
     ev.chord.forEach((freq, i) => {
       const osc = audioCtx.createOscillator();
+
       osc.type = i % 2 === 0 ? "sine" : "triangle";
       osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
       osc.connect(masterGain);
       osc.start();
+
       activeOscillators.push(osc);
     });
-  } catch (e) {
-    console.warn("Web Audio blocked:", e);
+
+  } catch (error) {
+    console.warn("Web Audio error:", error);
   }
 
   if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
+
     const utterance = new SpeechSynthesisUtterance(ev.narration);
+
     utterance.rate = narrationSpeed;
     utterance.pitch = 1.05;
-    utterance.onend = () => stopMelodiousAudio();
+
+    utterance.onend = () => {
+      stopMelodiousAudio();
+    };
+
+    utterance.onerror = () => {
+      stopMelodiousAudio();
+    };
+
     window.speechSynthesis.speak(utterance);
   }
 }
 
+// Stop all audio
 function stopMelodiousAudio() {
   isPlaying = false;
+
   updatePlayerUI(false);
-  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-  activeOscillators.forEach(osc => { try { osc.stop(); } catch(e){} });
+
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+
+  activeOscillators.forEach(osc => {
+    try {
+      osc.stop();
+    } catch (error) {}
+  });
+
   activeOscillators = [];
-  if (audioCtx) { try { audioCtx.close(); } catch(e){} audioCtx = null; }
+
+  if (audioCtx) {
+    try {
+      audioCtx.close();
+    } catch (error) {}
+
+    audioCtx = null;
+  }
 }
 
+// Update player interface
 function updatePlayerUI(playing) {
   const btn = document.getElementById("btn-play-pause");
   const badge = document.getElementById("now-playing-badge");
@@ -140,8 +214,49 @@ function updatePlayerUI(playing) {
   const toneArm = document.getElementById("tone-arm");
 
   if (btn) btn.textContent = playing ? "⏸" : "▶";
-  if (badge) badge.textContent = playing ? "NARRATING & SONIFYING" : "READY TO PLAY";
-  if (eq) { if (playing) eq.classList.add("playing"); else eq.classList.remove("playing"); }
-  if (cdDisk) { if (playing) cdDisk.classList.add("spinning"); else cdDisk.classList.remove("spinning"); }
-  if (toneArm) { if (playing) toneArm.classList.add("engaged"); else toneArm.classList.remove("engaged"); }
+
+  if (badge) {
+    badge.textContent = playing
+      ? "NARRATING & SONIFYING"
+      : "READY TO PLAY";
+  }
+
+  if (eq) eq.classList.toggle("playing", playing);
+  if (cdDisk) cdDisk.classList.toggle("spinning", playing);
+  if (toneArm) toneArm.classList.toggle("engaged", playing);
 }
+
+// Update volume
+function setMasterVolume(value) {
+  masterVolume = Math.max(0, Math.min(1, Number(value) || 0));
+}
+
+// Update narration speed
+function setNarrationSpeed(value) {
+  narrationSpeed = Math.max(0.5, Math.min(2, Number(value) || 1));
+}
+
+// Make functions and data accessible to app.js and HTML buttons
+window.nasaEvents = nasaEvents;
+window.playTone = playTone;
+window.speakText = speakText;
+window.playMelodiousNarration = playMelodiousNarration;
+window.stopMelodiousAudio = stopMelodiousAudio;
+window.setMasterVolume = setMasterVolume;
+window.setNarrationSpeed = setNarrationSpeed;
+
+// Share audio state with app.js
+Object.defineProperty(window, "isPlaying", {
+  configurable: true,
+  get: () => isPlaying
+});
+
+Object.defineProperty(window, "masterVolume", {
+  configurable: true,
+  get: () => masterVolume
+});
+
+Object.defineProperty(window, "narrationSpeed", {
+  configurable: true,
+  get: () => narrationSpeed
+});
