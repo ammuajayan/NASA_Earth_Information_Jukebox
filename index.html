@@ -4,24 +4,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Earth Information Jukebox</title>
+    <meta name="theme-color" content="#07111f">
+    <title>Earth Jukebox | NASA Hackathon</title>
     <link rel="stylesheet" href="/style.css">
 </head>
-
 <body>
-    <div class="container">
-        <h1>🌍 NASA Earth Information Jukebox</h1>
 
-        <p>
-            Explore the changing Earth through science,
-            data and sound.
+<header class="topbar">
+    <a class="brand" href="#">
+        <span class="brand-icon">🌍</span>
+        <span>EARTH<span class="accent">JUKEBOX</span></span>
+    </a>
+    <span class="live-label"><span class="pulse"></span> EXPLORER MODE</span>
+</header>
+
+<main class="dashboard">
+
+    <section class="hero">
+        <div class="hero-content">
+            <p class="eyebrow">NASA HACKATHON PROJECT · EARTH SYSTEM SCIENCE</p>
+            <h1>Listen to the<br><span>Heartbeat of Earth.</span></h1>
+            <p class="hero-text">
+                Explore our planet through climate data, discover
+                environmental changes and transform Earth science into sound.
+            </p>
+            <button id="startBtn" class="primary-btn">
+                START EXPLORING <span>→</span>
+            </button>
+            <p id="missionMessage" class="mission-message" aria-live="polite">
+                Your Earth exploration mission awaits.
+            </p>
+        </div>
+
+        <div class="earth-visual">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="earth">🌎</div>
+            <div class="orbit-caption">ONE PLANET · ONE STORY</div>
+        </div>
+    </section>
+
+    <section id="explorer" class="data-section">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">PLANETARY OBSERVATIONS</p>
+                <h2>Earth Data Explorer</h2>
+            </div>
+            <span class="demo-tag">DEMO DATA</span>
+        </div>
+
+        <div class="data-grid">
+            <article class="data-card temperature">
+                <div class="card-top">
+                    <span class="card-icon">🌡️</span>
+                    <span class="card-label">GLOBAL TEMPERATURE</span>
+                </div>
+                <h3 id="temperatureValue">+0.42°C</h3>
+                <p>Illustrative anomaly from baseline</p>
+            </article>
+
+            <article class="data-card carbon">
+                <div class="card-top">
+                    <span class="card-icon">💨</span>
+                    <span class="card-label">ATMOSPHERIC CO₂</span>
+                </div>
+                <h3 id="co2Value">369 ppm</h3>
+                <p>Illustrative concentration</p>
+            </article>
+
+            <article class="data-card ice">
+                <div class="card-top">
+                    <span class="card-icon">🧊</span>
+                    <span class="card-label">SEA ICE INDEX</span>
+                </div>
+                <h3 id="iceValue">6.8 M km²</h3>
+                <p>Illustrative extent indicator</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="timeline-section">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">TRAVEL THROUGH TIME</p>
+                <h2>Explore the Years</h2>
+            </div>
+            <span id="yearLabel" class="year-label">2025</span>
+        </div>
+
+        <input type="range" id="yearSlider"
+            min="2000" max="2025" value="2025"
+            aria-label="Select year">
+
+        <div class="range-labels">
+            <span>2000</span>
+            <span>2010</span>
+            <span>2020</span>
+            <span>2025</span>
+        </div>
+
+        <p id="timelineMessage" class="timeline-message">
+            Select a year to explore the demonstration dataset.
         </p>
+    </section>
 
-        <button id="startBtn">Start Exploring 🚀</button>
+    <section class="sound-section">
+        <div class="sound-info">
+            <p class="eyebrow">DATA SONIFICATION</p>
+            <h2>Can you hear the Earth?</h2>
+            <p>
+                Transform the selected year's demonstration data into
+                an audio experience.
+            </p>
+        </div>
 
-        <p id="message"></p>
-    </div>
+        <div class="sound-player">
+            <div class="sound-wave" id="soundWave">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+            <p id="soundStatus">READY TO GENERATE SOUND</p>
+            <button id="soundBtn" class="primary-btn sound-btn">
+                ▶ PLAY EARTH SOUND
+            </button>
+        </div>
+    </section>
 
-    <script type="module" src="/app.js"></script>
+    <section class="about-section">
+        <p class="eyebrow">OUR MISSION</p>
+        <h2>Making Earth science audible.</h2>
+        <p>
+            Earth Jukebox is an interactive science experience that
+            connects climate indicators with sound. It aims to make
+            complex environmental information more accessible and engaging.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <p>EARTH JUKEBOX · NASA HACKATHON CONCEPT</p>
+    <p>Built for a better understanding of our planet 🌍</p>
+</footer>
+
+<script type="module" src="/app.js"></script>
 </body>
 </html>
