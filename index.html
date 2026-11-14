@@ -1,155 +1,189 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#07111f">
-    <title>Earth Jukebox | NASA Hackathon</title>
-    <link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heartbeat of Earth | NASA Earth Information Jukebox</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Three.js for Interactive 3D Earth -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="topbar">
-    <a class="brand" href="#">
-        <span class="brand-icon">🌍</span>
-        <span>EARTH<span class="accent">JUKEBOX</span></span>
-    </a>
-    <span class="live-label"><span class="pulse"></span> EXPLORER MODE</span>
-</header>
+  <!-- STAGE 1: LANDING PAGE -->
+  <section id="stage-landing" class="stage active">
+    <div class="landing-content">
+      <div class="badge">NASA EARTH OBSERVATION ARCHIVE</div>
+      <h1 class="hero-title">HEARTBEAT OF EARTH</h1>
+      <p class="hero-subtitle">
+        Listen to the rhythm of our living planet. Experience real-time satellite telemetry, global temperatures, NOAA carbon dioxide levels, historical sea-ice data, and legendary orbital pioneers.
+      </p>
 
-<main class="dashboard">
+      <div class="pulse-container">
+        <svg viewBox="0 0 500 100" class="ecg-svg">
+          <polyline class="ecg-line" fill="none" stroke="#00ffcc" stroke-width="3"
+            points="0,50 120,50 140,20 160,85 180,10 200,75 220,50 340,50 360,30 375,65 390,50 500,50" />
+        </svg>
+      </div>
 
-    <section class="hero">
-        <div class="hero-content">
-            <p class="eyebrow">NASA HACKATHON PROJECT · EARTH SYSTEM SCIENCE</p>
-            <h1>Listen to the<br><span>Heartbeat of Earth.</span></h1>
-            <p class="hero-text">
-                Explore our planet through climate data, discover
-                environmental changes and transform Earth science into sound.
-            </p>
-            <button id="startBtn" class="primary-btn">
-                START EXPLORING <span>→</span>
-            </button>
-            <p id="missionMessage" class="mission-message" aria-live="polite">
-                Your Earth exploration mission awaits.
-            </p>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <button id="btn-explore" class="primary-btn">
+          <span>EXPLORE PLANET</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+        <button class="primary-btn accent-yellow" onclick="goToStage('stage-astronauts')">
+          <span>PIONEERS OF ORBIT</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 2: 3D EARTH ORBIT -->
+  <section id="stage-3d" class="stage">
+    <div id="earth-canvas-container"></div>
+    <div class="orbit-overlay">
+      <div class="orbit-header" style="display: flex; justify-content: space-between; width: 100%; align-items: center; padding: 0 20px;">
+        <div>
+          <span class="live-dot"></span> ORBITAL TELEMETRY LINKED
+          <h2>PLANETARY OVERVIEW</h2>
+          <p>Drag to rotate • Click GPS pins to inspect observation nodes</p>
         </div>
-
-        <div class="earth-visual">
-            <div class="orbit orbit-one"></div>
-            <div class="orbit orbit-two"></div>
-            <div class="earth">🌎</div>
-            <div class="orbit-caption">ONE PLANET · ONE STORY</div>
+        <div>
+          <button class="ghost-btn" onclick="goToStage('stage-astronauts')">👨‍🚀 Space Pioneers →</button>
         </div>
-    </section>
+      </div>
 
-    <section id="explorer" class="data-section">
-        <div class="section-heading">
-            <div>
-                <p class="eyebrow">PLANETARY OBSERVATIONS</p>
-                <h2>Earth Data Explorer</h2>
+      <div class="orbit-stats">
+        <div class="stat-pill"><span>NOAA CO₂ LEVEL</span><strong>424.6 ppm</strong></div>
+        <div class="stat-pill"><span>NASA TEMP ANOMALY</span><strong>+1.28 °C</strong></div>
+        <div class="stat-pill"><span>ACTIVE SATELLITES</span><strong>27 NASA Missions</strong></div>
+      </div>
+
+      <button id="btn-to-jukebox" class="primary-btn accent-yellow">
+        <span>OPEN EVENT PLAYLIST & CD JUKEBOX</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- STAGE 3: JUKEBOX WORKSPACE -->
+  <section id="stage-jukebox" class="stage">
+    <header class="jb-topbar">
+      <div class="jb-brand">
+        <span class="pulse-dot"></span>
+        <h1>EARTH INFORMATION JUKEBOX</h1>
+      </div>
+      <div class="jb-nav-actions">
+        <button id="btn-back-3d" class="ghost-btn">← 3D Globe</button>
+        <button class="ghost-btn" onclick="goToStage('stage-astronauts')">👨‍🚀 Pioneers</button>
+        <span class="mission-tag">NASA & NOAA DATA LINK</span>
+      </div>
+    </header>
+
+    <div class="jb-workspace">
+      <!-- Sidebar Playlist & Spinning CD Deck Controls -->
+      <aside class="jb-sidebar">
+        <div class="section-label">NASA EARTH EVENTS PLAYLIST</div>
+        <div id="playlist-container" class="playlist"></div>
+
+        <div class="jukebox-deck">
+          <div class="deck-status">
+            <span id="now-playing-badge">READY TO PLAY</span>
+            <div class="equalizer" id="equalizer">
+              <span></span><span></span><span></span><span></span><span></span>
             </div>
-            <span class="demo-tag">DEMO DATA</span>
-        </div>
+          </div>
 
-        <div class="data-grid">
-            <article class="data-card temperature">
-                <div class="card-top">
-                    <span class="card-icon">🌡️</span>
-                    <span class="card-label">GLOBAL TEMPERATURE</span>
-                </div>
-                <h3 id="temperatureValue">+0.42°C</h3>
-                <p>Illustrative anomaly from baseline</p>
-            </article>
-
-            <article class="data-card carbon">
-                <div class="card-top">
-                    <span class="card-icon">💨</span>
-                    <span class="card-label">ATMOSPHERIC CO₂</span>
-                </div>
-                <h3 id="co2Value">369 ppm</h3>
-                <p>Illustrative concentration</p>
-            </article>
-
-            <article class="data-card ice">
-                <div class="card-top">
-                    <span class="card-icon">🧊</span>
-                    <span class="card-label">SEA ICE INDEX</span>
-                </div>
-                <h3 id="iceValue">6.8 M km²</h3>
-                <p>Illustrative extent indicator</p>
-            </article>
-        </div>
-    </section>
-
-    <section class="timeline-section">
-        <div class="section-heading">
-            <div>
-                <p class="eyebrow">TRAVEL THROUGH TIME</p>
-                <h2>Explore the Years</h2>
+          <!-- Spinning CD / Vinyl Deck Component -->
+          <div class="cd-player-container">
+            <div id="tone-arm" class="tone-arm"></div>
+            <div id="cd-disk" class="cd-disk">
+              <div class="cd-center-label">
+                <div class="cd-spindle"></div>
+              </div>
             </div>
-            <span id="yearLabel" class="year-label">2025</span>
-        </div>
+          </div>
 
-        <input type="range" id="yearSlider"
-            min="2000" max="2025" value="2025"
-            aria-label="Select year">
+          <div class="deck-info">
+            <h3 id="deck-title">Select an Earth Event</h3>
+            <p id="deck-coords">Coordinates: --</p>
+          </div>
 
-        <div class="range-labels">
-            <span>2000</span>
-            <span>2010</span>
-            <span>2020</span>
-            <span>2025</span>
-        </div>
+          <div class="deck-controls">
+            <button id="btn-prev" class="ctrl-btn" title="Previous Track">⏮</button>
+            <button id="btn-play-pause" class="ctrl-btn play-main" title="Play Melodious Narration">▶</button>
+            <button id="btn-next" class="ctrl-btn" title="Next Track">⏭</button>
+            <button id="btn-stop" class="ctrl-btn" title="Stop Audio">⏹</button>
+          </div>
 
-        <p id="timelineMessage" class="timeline-message">
-            Select a year to explore the demonstration dataset.
-        </p>
-    </section>
-
-    <section class="sound-section">
-        <div class="sound-info">
-            <p class="eyebrow">DATA SONIFICATION</p>
-            <h2>Can you hear the Earth?</h2>
-            <p>
-                Transform the selected year's demonstration data into
-                an audio experience.
-            </p>
-        </div>
-
-        <div class="sound-player">
-            <div class="sound-wave" id="soundWave">
-                <span></span><span></span><span></span>
-                <span></span><span></span><span></span>
-                <span></span><span></span><span></span>
-                <span></span><span></span><span></span>
-                <span></span><span></span><span></span>
+          <div class="deck-sliders">
+            <div class="slider-group">
+              <label for="volume-slider">Volume: <span id="vol-val">70%</span></label>
+              <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.7">
             </div>
-            <p id="soundStatus">READY TO GENERATE SOUND</p>
-            <button id="soundBtn" class="primary-btn sound-btn">
-                ▶ PLAY EARTH SOUND
-            </button>
+            <div class="slider-group">
+              <label for="speed-slider">Speed: <span id="speed-val">1.0x</span></label>
+              <input type="range" id="speed-slider" min="0.75" max="1.5" step="0.05" value="1.0">
+            </div>
+          </div>
         </div>
-    </section>
+      </aside>
 
-    <section class="about-section">
-        <p class="eyebrow">OUR MISSION</p>
-        <h2>Making Earth science audible.</h2>
-        <p>
-            Earth Jukebox is an interactive science experience that
-            connects climate indicators with sound. It aims to make
-            complex environmental information more accessible and engaging.
-        </p>
-    </section>
+      <!-- Main Panel with Added Seasonal Tab -->
+      <main class="jb-main">
+        <nav class="feature-tabs" id="feature-tabs">
+          <button class="tab-btn active" data-tab="f1">1. Event Story</button>
+          <button class="tab-btn" data-tab="f2">2. Data Sonification</button>
+          <button class="tab-btn" data-tab="f3">3. Global Temperature</button>
+          <button class="tab-btn" data-tab="f4">4. NOAA CO₂ Data</button>
+          <button class="tab-btn" data-tab="f5">5. Sea-Ice Trends</button>
+          <button class="tab-btn" data-tab="f6">6. Timeline</button>
+          <button class="tab-btn" data-tab="f7">7. Seasonal Dynamics</button>
+        </nav>
 
-</main>
+        <div id="feature-viewport" class="feature-viewport"></div>
+      </main>
+    </div>
+  </section>
 
-<footer>
-    <p>EARTH JUKEBOX · NASA HACKATHON CONCEPT</p>
-    <p>Built for a better understanding of our planet 🌍</p>
-</footer>
+  <!-- STAGE 4: PROMINENT ASTRONAUTS FLASHCARD GALLERY -->
+  <section id="stage-astronauts" class="stage">
+    <header class="jb-topbar">
+      <div class="jb-brand">
+        <span class="pulse-dot" style="background: var(--cyan); box-shadow: 0 0 12px var(--cyan);"></span>
+        <h1>ORBITAL PIONEERS & ASTRONAUTS</h1>
+      </div>
+      <div class="jb-nav-actions">
+        <button class="ghost-btn" onclick="goToStage('stage-3d')">← 3D Globe</button>
+        <button class="ghost-btn" onclick="goToStage('stage-jukebox')">♫ Jukebox</button>
+      </div>
+    </header>
 
-<script type="module" src="/app.js"></script>
+    <div class="astro-viewport">
+      <div class="astro-header-info">
+        <h2>LEGENDS WHO VIEWED EARTH FROM ABOVE</h2>
+        <p>Click any astronaut flashcard to flip their record, read their historic achievements, and trigger their unique orbital sound signature.</p>
+      </div>
+
+      <div class="astro-grid" id="astro-grid-container">
+        <!-- Injected via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Modular JavaScript Files -->
+  <script src="earth.js"></script>
+  <script src="discovery.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
