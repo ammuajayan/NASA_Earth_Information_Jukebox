@@ -1,0 +1,567 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>NASA EIC | Earth Discovery Library</title>
+
+  <meta name="description" content="Explore NASA Earth science visualizations, listen to scientific stories, and experience experimental data sonification.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+  <script type="module" crossorigin src="/assets/discovery-CQzhlmHZ.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/eic-resources-CnmnrYij.js">
+  <link rel="stylesheet" crossorigin href="/assets/discovery-CxV6KAvS.css">
+</head>
+
+<body>
+
+  <!-- BACKGROUND -->
+  <div class="space-background"></div>
+  <div class="background-glow"></div>
+
+  <!-- NAVIGATION -->
+  <header class="eic-navbar">
+
+    <a href="/" class="eic-brand">
+      <span class="brand-symbol">✦</span>
+      <span>
+        <strong>NASA EIC</strong>
+        <small>EARTH DISCOVERY LIBRARY</small>
+      </span>
+    </a>
+
+    <nav class="eic-nav-links">
+      <a href="#discover">Discover</a>
+      <a href="#jukebox">Sound Engine</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <a href="/" class="back-home-btn">
+      ← EARTH JUKEBOX
+    </a>
+
+  </header>
+
+
+  <!-- HERO SECTION -->
+  <section class="eic-hero">
+
+    <div class="hero-content">
+
+      <div class="eyebrow">
+        <span class="status-dot"></span>
+        EXPLORING OUR LIVING PLANET
+      </div>
+
+      <h1>
+        THE EARTH<br>
+        <span>DISCOVERY LIBRARY</span>
+      </h1>
+
+      <p>
+        Explore the hidden stories of our planet through
+        NASA's scientific visualizations. See Earth differently.
+        Listen to its stories. Experience its science through sound.
+      </p>
+
+      <div class="hero-actions">
+
+        <a href="#discover" class="hero-primary-btn">
+          EXPLORE DISCOVERIES ↓
+        </a>
+
+        <a href="#jukebox" class="hero-secondary-btn">
+          ♪ ENTER SOUND ENGINE
+        </a>
+
+      </div>
+
+      <div class="hero-facts">
+
+        <div>
+          <strong>11+</strong>
+          <span>NASA RESOURCES</span>
+        </div>
+
+        <div>
+          <strong>5</strong>
+          <span>EARTH SYSTEMS</span>
+        </div>
+
+        <div>
+          <strong>∞</strong>
+          <span>WAYS TO EXPLORE</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="hero-visual">
+
+      <div class="earth-orbit orbit-one"></div>
+      <div class="earth-orbit orbit-two"></div>
+
+      <div class="earth-globe">
+        <div class="earth-globe-label">
+          <span>EARTH</span>
+          <small>OUR HOME</small>
+        </div>
+      </div>
+
+      <div class="orbit-caption">
+        <span class="status-dot"></span>
+        PLANETARY DISCOVERY ACTIVE
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- DISCOVERY LIBRARY -->
+  <main>
+
+    <section class="discovery-section" id="discover">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="section-kicker">01 / EXPLORE NASA SCIENCE</span>
+
+          <h2>Discover Earth</h2>
+
+          <p>
+            Browse scientific visualizations from NASA's
+            Earth observation archive.
+          </p>
+        </div>
+
+        <div class="resource-counter">
+          <strong id="resource-count">11</strong>
+          <span>DISCOVERIES</span>
+        </div>
+
+      </div>
+
+
+      <!-- SEARCH -->
+      <div class="discovery-toolbar">
+
+        <div class="search-box">
+          <span>⌕</span>
+
+          <input
+            type="search"
+            id="resource-search"
+            placeholder="Search oceans, atmosphere, climate..."
+            aria-label="Search NASA discoveries"
+          >
+        </div>
+
+        <select id="category-filter" aria-label="Filter by category">
+          <option value="all">All discoveries</option>
+          <option value="Ocean">Oceans</option>
+          <option value="Atmosphere">Atmosphere</option>
+          <option value="Climate">Climate</option>
+          <option value="Weather">Weather</option>
+          <option value="Human Activity">Human Activity</option>
+          <option value="Ecosystems">Ecosystems</option>
+          <option value="Earth Overview">Earth Overview</option>
+          <option value="Data Sonification">Data Sonification</option>
+        </select>
+
+      </div>
+
+
+      <!-- CATEGORY CHIPS -->
+      <div class="category-chips" id="category-chips">
+
+        <button class="category-chip active" data-category="all">
+          All
+        </button>
+
+        <button class="category-chip" data-category="Ocean">
+          🌊 Ocean
+        </button>
+
+        <button class="category-chip" data-category="Atmosphere">
+          ☁ Atmosphere
+        </button>
+
+        <button class="category-chip" data-category="Climate">
+          🌍 Climate
+        </button>
+
+        <button class="category-chip" data-category="Weather">
+          ⚡ Weather
+        </button>
+
+        <button class="category-chip" data-category="Ecosystems">
+          🌳 Ecosystems
+        </button>
+
+        <button class="category-chip" data-category="Human Activity">
+          🌃 Human Activity
+        </button>
+
+      </div>
+
+
+      <!-- FEATURED DISCOVERY -->
+      <div class="featured-discovery" id="featured-discovery">
+
+        <div class="featured-image" id="featured-image">
+
+          <div class="featured-image-overlay"></div>
+
+          <span class="featured-label">
+            FEATURED DISCOVERY
+          </span>
+
+          <div class="featured-image-caption">
+            <span>NASA EARTH OBSERVATIONS</span>
+            <h3 id="featured-image-title">
+              Explore Our Living Planet
+            </h3>
+          </div>
+
+        </div>
+
+        <div class="featured-details">
+
+          <span class="section-kicker">SELECTED SCIENTIFIC STORY</span>
+
+          <h2 id="featured-title">
+            The Earth Information Center
+          </h2>
+
+          <p id="featured-description">
+            Explore NASA visualizations and scientific stories
+            that reveal how Earth's interconnected systems work.
+          </p>
+
+          <div class="featured-actions">
+
+            <button id="featured-listen" class="primary-action">
+              🔊 LISTEN TO STORY
+            </button>
+
+            <a
+              id="featured-source"
+              href="https://svs.gsfc.nasa.gov/gallery/earth-information-center/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="secondary-action"
+            >
+              EXPLORE NASA ↗
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- RESOURCE GRID -->
+      <div class="resource-grid" id="resource-grid">
+
+        <div class="loading-message">
+          Loading NASA discoveries...
+        </div>
+
+      </div>
+
+      <div class="empty-state" id="empty-state" hidden>
+        <h3>No discoveries found</h3>
+        <p>Try another search or category.</p>
+      </div>
+
+    </section>
+
+
+    <!-- SCIENCE STORY / VOICEOVER -->
+    <section class="story-section" id="story-section">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="section-kicker">02 / LISTEN TO SCIENCE</span>
+          <h2>Stories of Our Planet</h2>
+
+          <p>
+            Turn scientific discoveries into narrated experiences.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="story-player">
+
+        <div class="story-icon">🎙</div>
+
+        <div class="story-content">
+
+          <span class="section-kicker">NASA SCIENCE NARRATOR</span>
+
+          <h3 id="story-title">Choose a discovery to begin</h3>
+
+          <p id="story-text">
+            Select a resource from the gallery and listen
+            to its scientific story.
+          </p>
+
+          <div class="story-controls">
+
+            <button id="voice-play" class="primary-action">
+              ▶ PLAY
+            </button>
+
+            <button id="voice-pause" class="secondary-action">
+              Ⅱ PAUSE
+            </button>
+
+            <button id="voice-stop" class="secondary-action">
+              ■ STOP
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SCIENCE TO MUSIC JUKEBOX -->
+    <section class="jukebox-section" id="jukebox">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="section-kicker">03 / SCIENCE MEETS MUSIC</span>
+
+          <h2>The Earth Sound Engine</h2>
+
+          <p>
+            Translate the patterns of our planet into
+            experimental musical experiences.
+          </p>
+        </div>
+
+        <div class="sound-engine-status">
+          <span class="status-dot"></span>
+          AUDIO ENGINE
+        </div>
+
+      </div>
+
+
+      <div class="jukebox-interface">
+
+        <!-- VINYL PLAYER -->
+        <div class="vinyl-panel">
+
+          <div class="vinyl-record" id="vinyl-record">
+
+            <div class="vinyl-grooves"></div>
+
+            <div class="vinyl-label">
+              <span>EARTH</span>
+              <small>SOUND</small>
+            </div>
+
+          </div>
+
+          <div class="vinyl-caption">
+            <span id="vinyl-status">READY TO PLAY</span>
+            <h3 id="jukebox-track-title">
+              Select a science track
+            </h3>
+          </div>
+
+        </div>
+
+
+        <!-- PLAYER CONTROLS -->
+        <div class="sound-controls-panel">
+
+          <span class="section-kicker">SELECT YOUR EARTH SOUNDTRACK</span>
+
+          <h3>Choose a data experience</h3>
+
+          <div class="track-list" id="track-list">
+
+            <button class="sound-track active" data-track="ocean">
+              <span>🌊</span>
+              <span>
+                <strong>Ocean Currents</strong>
+                <small>Flow and movement</small>
+              </span>
+              <span class="track-play-icon">▶</span>
+            </button>
+
+            <button class="sound-track" data-track="carbon">
+              <span>🌍</span>
+              <span>
+                <strong>Atmospheric CO₂</strong>
+                <small>Carbon concentration</small>
+              </span>
+              <span class="track-play-icon">▶</span>
+            </button>
+
+            <button class="sound-track" data-track="ice">
+              <span>❄️</span>
+              <span>
+                <strong>Polar Sea Ice</strong>
+                <small>Changing ice extent</small>
+              </span>
+              <span class="track-play-icon">▶</span>
+            </button>
+
+            <button class="sound-track" data-track="lights">
+              <span>🌃</span>
+              <span>
+                <strong>Global Night Lights</strong>
+                <small>Human activity</small>
+              </span>
+              <span class="track-play-icon">▶</span>
+            </button>
+
+            <button class="sound-track" data-track="atmosphere">
+              <span>☁️</span>
+              <span>
+                <strong>Atmospheric Aerosols</strong>
+                <small>Dust and particles</small>
+              </span>
+              <span class="track-play-icon">▶</span>
+            </button>
+
+          </div>
+
+
+          <!-- PLAYBACK -->
+          <div class="music-player-controls">
+
+            <div class="music-buttons">
+
+              <button id="music-stop" aria-label="Stop music">
+                ■
+              </button>
+
+              <button id="music-play" class="music-play-btn" aria-label="Play music">
+                ▶
+              </button>
+
+              <button id="music-next" aria-label="Next track">
+                ⏭
+              </button>
+
+            </div>
+
+            <div class="music-volume">
+
+              <label for="music-volume">
+                VOLUME
+                <span id="music-volume-value">70%</span>
+              </label>
+
+              <input
+                type="range"
+                id="music-volume"
+                min="0"
+                max="100"
+                value="70"
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- SOUND MAPPING -->
+          <div class="sound-mapping">
+
+            <span class="section-kicker">EXPERIMENTAL DATA MAPPING</span>
+
+            <div class="mapping-row">
+              <span>Scientific value</span>
+              <span>Musical pitch</span>
+            </div>
+
+            <div class="mapping-row">
+              <span>Rate of change</span>
+              <span>Rhythm / Tempo</span>
+            </div>
+
+            <div class="mapping-row">
+              <span>Intensity</span>
+              <span>Sound dynamics</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <p class="science-disclaimer">
+        Soundtracks are experimental sonification concepts created
+        by this project. They are not official NASA audio recordings.
+        The current sound engine uses designed mappings; it does not
+        automatically represent measured values unless connected
+        to the corresponding scientific dataset.
+      </p>
+
+    </section>
+
+
+    <!-- ABOUT -->
+    <section class="about-section" id="about">
+
+      <span class="section-kicker">04 / OUR MISSION</span>
+
+      <h2>Making Earth Science <span>Feel Alive.</span></h2>
+
+      <p>
+        The NASA Earth Information Jukebox combines scientific
+        visualization, storytelling and experimental sonification
+        to make Earth observation more engaging and accessible.
+      </p>
+
+      <div class="about-footer">
+        <span>INSPIRED BY NASA EARTH SCIENCE</span>
+        <span>HEARTBEAT OF EARTH © 2026</span>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="eic-footer">
+
+    <div>
+      <strong>NASA EIC DISCOVERY LIBRARY</strong>
+      <p>Explore. Listen. Discover.</p>
+    </div>
+
+    <a href="/">← Return to Earth Jukebox</a>
+
+  </footer>
+
+
+  <!-- JAVASCRIPT -->
+
+</body>
+</html>
