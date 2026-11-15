@@ -1,16 +1,18 @@
+
 {
-  "name": "earth-information-jukebox",
-  "private": true,
+  "name": "earth-jukebox",
   "version": "1.0.0",
+  "private": true,
+  "description": "NASA Earth Information Jukebox - Interactive Earth science and original data-inspired soundscapes",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "three": "^0.160.0"
-  },
-  "devDependencies": {
-    "vite": "^5.0.0"
+    "chart.js": "^4.6.1",
+    "three": "^0.187.0",
+    "vite": "^8.3.8"
   }
 }

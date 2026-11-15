@@ -1,0 +1,102 @@
+
+export const eicResources = [
+  {
+    id: "earth-info",
+    title: "Earth Information Center",
+    category: "Earth Overview",
+    period: "NASA visualization collection",
+    description: "Explore NASA visualizations and stories showing how Earth's systems are changing.",
+    url: "https://svs.gsfc.nasa.gov/gallery/earth-information-center/",
+    soundIdea: "Create an introductory Earth soundscape from visual patterns."
+  },
+  {
+    id: "sonification",
+    title: "Data Sonification: Caldwell 73",
+    category: "Data Sonification",
+    period: "NASA sonification example",
+    description: "Explore how scientific visual information can be translated into sound.",
+    url: "https://svs.gsfc.nasa.gov/13786/",
+    soundIdea: "Use changing brightness and visual intensity to control musical notes."
+  },
+  {
+    id: "night-lights",
+    title: "Global Night Lights",
+    category: "Human Activity",
+    period: "2012–2023",
+    description: "Explore changes in artificial lighting across Earth's surface.",
+    url: "https://svs.gsfc.nasa.gov/5313/",
+    soundIdea: "Map brightness and changes in city lights to musical intensity."
+  },
+  {
+    id: "ocean-temperature",
+    title: "Global Sea Surface Currents and Temperature",
+    category: "Ocean",
+    period: "NASA ocean visualization",
+    description: "Explore ocean surface temperatures and global current patterns.",
+    url: "https://svs.gsfc.nasa.gov/3912/",
+    soundIdea: "Map ocean temperature to pitch and current speed to rhythm."
+  },
+  {
+    id: "aerosols",
+    title: "GEOS Aerosols",
+    category: "Atmosphere",
+    period: "NASA GEOS visualization",
+    description: "Explore atmospheric aerosols, including dust and smoke.",
+    url: "https://svs.gsfc.nasa.gov/5669/",
+    soundIdea: "Map aerosol intensity to layered sound textures."
+  },
+  {
+    id: "air-quality",
+    title: "Air Quality Model Runs",
+    category: "Atmosphere",
+    period: "NASA model visualization",
+    description: "Explore atmospheric pollutants and air-quality patterns.",
+    url: "https://svs.gsfc.nasa.gov/5533/",
+    soundIdea: "Map pollutant concentration to changes in pitch and volume."
+  },
+  {
+    id: "perpetual-ocean",
+    title: "Perpetual Ocean 2",
+    category: "Ocean",
+    period: "NASA ocean visualization",
+    description: "Explore the movement of major ocean currents.",
+    url: "https://svs.gsfc.nasa.gov/5425/",
+    soundIdea: "Map current velocity to tempo and direction to stereo movement."
+  },
+  {
+    id: "carbon-dioxide",
+    title: "DYAMOND Global Carbon Dioxide",
+    category: "Climate",
+    period: "January–March 2020",
+    description: "Explore a global three-dimensional atmospheric CO2 visualization.",
+    url: "https://svs.gsfc.nasa.gov/5196/",
+    soundIdea: "Map CO2 concentration to pitch and its changes to musical progression."
+  },
+  {
+    id: "lightning",
+    title: "Lightning Events from the ISS",
+    category: "Weather",
+    period: "2017–2023",
+    description: "Explore lightning observations collected from the International Space Station.",
+    url: "https://svs.gsfc.nasa.gov/5011/",
+    soundIdea: "Translate lightning events into rhythmic percussion."
+  },
+  {
+    id: "atmospheric-river",
+    title: "Atmospheric River",
+    category: "Weather",
+    period: "NASA visualization",
+    description: "Explore the movement of atmospheric moisture around Earth.",
+    url: "https://svs.gsfc.nasa.gov/4960/",
+    soundIdea: "Map moisture intensity and movement to flowing musical patterns."
+  },
+  {
+    id: "forest-height",
+    title: "GEDI Forest Height",
+    category: "Ecosystems",
+    period: "NASA GEDI visualization",
+    description: "Explore forest-height observations collected from the International Space Station.",
+    url: "https://svs.gsfc.nasa.gov/4950/",
+    soundIdea: "Map forest height and variation to musical notes."
+  }
+];

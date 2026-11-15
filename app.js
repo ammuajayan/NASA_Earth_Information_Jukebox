@@ -1,9 +1,10 @@
 
 /* ==========================================
    NASA EARTH INFORMATION JUKEBOX
-   app.js - State Management, Navigation,
-   Interactive Views and Astronaut Cards
+   app.js - Complete Application
 ========================================== */
+
+import { eicResources } from "./eic-resources.js";
 
 let currentEventIndex = 0;
 let currentTab = "f1";
@@ -14,6 +15,7 @@ let currentSeason = "spring";
 // ==========================================
 
 window.goToStage = function(stageId) {
+
   const stages = [
     "stage-landing",
     "stage-3d",
@@ -22,8 +24,7 @@ window.goToStage = function(stageId) {
   ];
 
   stages.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove("active");
+    document.getElementById(id)?.classList.remove("active");
   });
 
   const target = document.getElementById(stageId);
@@ -35,22 +36,16 @@ window.goToStage = function(stageId) {
 
   target.classList.add("active");
 
-  // Initialize 3D Earth
   if (stageId === "stage-3d" && !window.earth3DInitialized) {
-    if (
-      window.EarthExperience &&
-      typeof window.EarthExperience.initialize === "function"
-    ) {
+
+    if (window.EarthExperience?.initialize) {
       window.EarthExperience.initialize();
       window.earth3DInitialized = true;
     } else {
-      console.error(
-        "EarthExperience not found. Check earth.js and its script loading."
-      );
+      console.error("EarthExperience not found. Check earth.js.");
     }
   }
 
-  // Render astronaut cards
   if (stageId === "stage-astronauts") {
     window.renderAstronautCards?.();
   }
@@ -62,31 +57,30 @@ window.goToStage = function(stageId) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const btnExplore = document.getElementById("btn-explore");
+  document.getElementById("btn-explore")?.addEventListener("click", () => {
+    window.goToStage("stage-3d");
+  });
 
-  if (btnExplore) {
-    btnExplore.addEventListener("click", () => {
-      window.goToStage("stage-3d");
-    });
-  }
+  document.getElementById("btn-to-jukebox")?.addEventListener("click", () => {
 
-  const btnToJukebox = document.getElementById("btn-to-jukebox");
+    window.goToStage("stage-jukebox");
 
-  if (btnToJukebox) {
-    btnToJukebox.addEventListener("click", () => {
-      window.goToStage("stage-jukebox");
-      renderPlaylist();
-      window.selectEvent(0, false);
-    });
-  }
+    renderPlaylist();
 
-  const btnBack3D = document.getElementById("btn-back-3d");
+    window.selectEvent(0, false);
+  });
 
-  if (btnBack3D) {
-    btnBack3D.addEventListener("click", () => {
-      window.stopMelodiousAudio?.();
-      window.goToStage("stage-3d");
-    });
+  document.getElementById("btn-back-3d")?.addEventListener("click", () => {
+
+    window.stopMelodiousAudio?.();
+
+    window.goToStage("stage-3d");
+  });
+
+  // Initial playlist and feature content
+  if (window.nasaEvents?.length) {
+    renderPlaylist();
+    window.selectEvent(0, false);
   }
 
 });
@@ -96,16 +90,18 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
 
 function renderPlaylist() {
+
   const container = document.getElementById("playlist-container");
 
   if (!container || !window.nasaEvents) return;
 
   container.innerHTML = window.nasaEvents.map((ev, idx) => `
+
     <div class="track-card ${idx === currentEventIndex ? "active" : ""}"
          onclick="selectEvent(${idx}, true)">
 
       <div class="track-card-top">
-        <span>TRACK 0${idx + 1} • ${ev.category}</span>
+        <span>TRACK ${String(idx + 1).padStart(2, "0")} • ${ev.category}</span>
         <span>${ev.date}</span>
       </div>
 
@@ -113,6 +109,7 @@ function renderPlaylist() {
       <p>${ev.satellite}</p>
 
     </div>
+
   `).join("");
 }
 
@@ -122,10 +119,7 @@ function renderPlaylist() {
 
 window.selectEvent = function(index, autoPlay = true) {
 
-  if (
-    !window.nasaEvents ||
-    !window.nasaEvents[index]
-  ) {
+  if (!window.nasaEvents?.[index]) {
     console.error("NASA event not found:", index);
     return;
   }
@@ -137,9 +131,7 @@ window.selectEvent = function(index, autoPlay = true) {
   const deckTitle = document.getElementById("deck-title");
   const deckCoords = document.getElementById("deck-coords");
 
-  if (deckTitle) {
-    deckTitle.textContent = ev.title;
-  }
+  if (deckTitle) deckTitle.textContent = ev.title;
 
   if (deckCoords) {
     deckCoords.textContent = `📍 ${ev.coords}`;
@@ -158,99 +150,83 @@ window.selectEvent = function(index, autoPlay = true) {
 // ==========================================
 
 // Play / Pause
-const playPauseBtn = document.getElementById("btn-play-pause");
 
-if (playPauseBtn) {
-  playPauseBtn.addEventListener("click", () => {
+document.getElementById("btn-play-pause")?.addEventListener("click", () => {
 
-    if (window.isPlaying) {
-      window.stopMelodiousAudio?.();
-    } else if (window.nasaEvents?.[currentEventIndex]) {
-      window.playMelodiousNarration?.(
-        window.nasaEvents[currentEventIndex]
-      );
-    }
+  if (window.isPlaying) {
+    window.stopMelodiousAudio?.();
+  } else if (window.nasaEvents?.[currentEventIndex]) {
+    window.playMelodiousNarration?.(
+      window.nasaEvents[currentEventIndex]
+    );
+  }
 
-  });
-}
+});
 
 // Stop
-const stopBtn = document.getElementById("btn-stop");
 
-if (stopBtn) {
-  stopBtn.addEventListener("click", () => {
-    window.stopMelodiousAudio?.();
-  });
-}
+document.getElementById("btn-stop")?.addEventListener("click", () => {
+  window.stopMelodiousAudio?.();
+});
 
 // Next Track
-const nextBtn = document.getElementById("btn-next");
 
-if (nextBtn) {
-  nextBtn.addEventListener("click", () => {
+document.getElementById("btn-next")?.addEventListener("click", () => {
 
-    if (!window.nasaEvents?.length) return;
+  if (!window.nasaEvents?.length) return;
 
-    const nextIndex =
-      (currentEventIndex + 1) % window.nasaEvents.length;
+  const nextIndex =
+    (currentEventIndex + 1) % window.nasaEvents.length;
 
-    window.selectEvent(nextIndex, true);
+  window.selectEvent(nextIndex, true);
 
-  });
-}
+});
 
 // Previous Track
-const prevBtn = document.getElementById("btn-prev");
 
-if (prevBtn) {
-  prevBtn.addEventListener("click", () => {
+document.getElementById("btn-prev")?.addEventListener("click", () => {
 
-    if (!window.nasaEvents?.length) return;
+  if (!window.nasaEvents?.length) return;
 
-    const previousIndex =
-      (currentEventIndex - 1 + window.nasaEvents.length) %
-      window.nasaEvents.length;
+  const previousIndex =
+    (currentEventIndex - 1 + window.nasaEvents.length) %
+    window.nasaEvents.length;
 
-    window.selectEvent(previousIndex, true);
+  window.selectEvent(previousIndex, true);
 
-  });
-}
+});
 
 // Volume Control
-const volumeSlider = document.getElementById("volume-slider");
 
-if (volumeSlider) {
-  volumeSlider.addEventListener("input", (e) => {
+document.getElementById("volume-slider")?.addEventListener("input", e => {
 
-    window.setMasterVolume?.(e.target.value);
+  const value = Number(e.target.value);
 
-    const volumeValue = document.getElementById("vol-val");
+  window.setMasterVolume?.(value);
 
-    if (volumeValue) {
-      volumeValue.textContent =
-        `${Math.round((window.masterVolume ?? 0.7) * 100)}%`;
-    }
+  const volumeValue = document.getElementById("vol-val");
 
-  });
-}
+  if (volumeValue) {
+    volumeValue.textContent = `${Math.round(value * 100)}%`;
+  }
 
-// Playback Speed Control
-const speedSlider = document.getElementById("speed-slider");
+});
 
-if (speedSlider) {
-  speedSlider.addEventListener("input", (e) => {
+// Playback Speed
 
-    window.setNarrationSpeed?.(e.target.value);
+document.getElementById("speed-slider")?.addEventListener("input", e => {
 
-    const speedValue = document.getElementById("speed-val");
+  const value = Number(e.target.value);
 
-    if (speedValue) {
-      speedValue.textContent =
-        `${(window.narrationSpeed ?? 1).toFixed(2)}x`;
-    }
+  window.setNarrationSpeed?.(value);
 
-  });
-}
+  const speedValue = document.getElementById("speed-val");
+
+  if (speedValue) {
+    speedValue.textContent = `${value.toFixed(2)}x`;
+  }
+
+});
 
 // ==========================================
 // FEATURE TABS
@@ -266,7 +242,7 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 
     btn.classList.add("active");
 
-    currentTab = btn.getAttribute("data-tab");
+    currentTab = btn.dataset.tab;
 
     renderFeatureTab(currentTab);
 
@@ -297,7 +273,15 @@ function renderFeatureTab(tabId) {
 
   const viewport = document.getElementById("feature-viewport");
 
-  if (!viewport || !window.nasaEvents) return;
+  if (!viewport) return;
+
+  // NASA EIC Library does not depend on an event
+  if (tabId === "f8") {
+    renderEICLibrary(viewport);
+    return;
+  }
+
+  if (!window.nasaEvents) return;
 
   const ev = window.nasaEvents[currentEventIndex];
 
@@ -306,17 +290,18 @@ function renderFeatureTab(tabId) {
   switch (tabId) {
 
     // --------------------------------------
-    // TAB 1 - EVENT OVERVIEW
+    // TAB 1 - EVENT STORY
     // --------------------------------------
 
     case "f1":
 
       viewport.innerHTML = `
+
         <span class="badge">${ev.category}</span>
 
         <h2>${ev.title}</h2>
 
-        <p style="color:var(--text-dim); margin-top:4px;">
+        <p style="color:var(--text-dim);margin-top:4px;">
           Observed by <strong>${ev.satellite}</strong> • ${ev.date}
         </p>
 
@@ -324,8 +309,7 @@ function renderFeatureTab(tabId) {
           “${ev.narration}”
         </div>
 
-        <button class="primary-btn"
-          onclick="playMelodiousNarration(nasaEvents[${ev.id}])">
+        <button class="primary-btn" id="btn-event-narration">
           ♪ Play Audio Narration
         </button>
 
@@ -349,6 +333,11 @@ function renderFeatureTab(tabId) {
         </div>
       `;
 
+      document.getElementById("btn-event-narration")
+        ?.addEventListener("click", () => {
+          window.playMelodiousNarration?.(ev);
+        });
+
       break;
 
     // --------------------------------------
@@ -358,6 +347,7 @@ function renderFeatureTab(tabId) {
     case "f2":
 
       viewport.innerHTML = `
+
         <h2>2. Scientific Data Sonification Synthesizer</h2>
 
         <p style="color:var(--text-dim);">
@@ -367,32 +357,44 @@ function renderFeatureTab(tabId) {
         <div class="card-grid">
 
           ${ev.chord.map((freq, idx) => `
+
             <div class="data-box" style="text-align:center;">
 
               <h4>TELEMETRY FREQ ${idx + 1}</h4>
 
               <div class="big-val">${freq} Hz</div>
 
-              <button class="ghost-btn" style="margin-top:10px;"
-                onclick="playTone(${freq})">
+              <button class="ghost-btn tone-preview-btn"
+                data-frequency="${freq}"
+                style="margin-top:10px;">
                 ▶ Audition Tone
               </button>
 
             </div>
+
           `).join("")}
 
         </div>
       `;
 
+      viewport.querySelectorAll(".tone-preview-btn").forEach(button => {
+
+        button.addEventListener("click", () => {
+          window.playTone?.(Number(button.dataset.frequency));
+        });
+
+      });
+
       break;
 
     // --------------------------------------
-    // TAB 3 - TEMPERATURE
+    // TAB 3 - GLOBAL TEMPERATURE
     // --------------------------------------
 
     case "f3":
 
       viewport.innerHTML = `
+
         <h2>3. NASA Global Surface Temperature Data</h2>
 
         <p style="color:var(--text-dim);">
@@ -423,16 +425,17 @@ function renderFeatureTab(tabId) {
       break;
 
     // --------------------------------------
-    // TAB 4 - CO2
+    // TAB 4 - NOAA CO2
     // --------------------------------------
 
     case "f4":
 
       viewport.innerHTML = `
+
         <h2>4. NOAA Mauna Loa Atmospheric CO₂</h2>
 
         <p style="color:var(--text-dim);">
-          Direct atmospheric sampling tracking carbon accumulation.
+          Atmospheric sampling tracking carbon accumulation.
         </p>
 
         <div class="card-grid" style="margin-top:16px;">
@@ -462,10 +465,11 @@ function renderFeatureTab(tabId) {
     case "f5":
 
       viewport.innerHTML = `
+
         <h2>5. Polar Sea-Ice Extent & Cryosphere</h2>
 
         <p style="color:var(--text-dim);">
-          Continuous passive microwave satellite monitoring of polar ice caps.
+          Passive microwave satellite monitoring of polar ice caps.
         </p>
 
         <div class="card-grid" style="margin-top:16px;">
@@ -489,12 +493,14 @@ function renderFeatureTab(tabId) {
       break;
 
     // --------------------------------------
-    // TAB 6 - HISTORICAL TREND
+    // TAB 6 - HISTORICAL TIMELINE
     // --------------------------------------
 
     case "f6": {
 
-      const points = ev.timeline.map((t, idx) => {
+      const timeline = ev.timeline || [];
+
+      const points = timeline.map((t, idx) => {
 
         const x = 50 + idx * 130;
         const y = 180 - (t.val / 100) * 130;
@@ -504,10 +510,11 @@ function renderFeatureTab(tabId) {
       }).join(" ");
 
       viewport.innerHTML = `
-        <h2>6. Historical Multi-Decadal Progression & Trend Graph</h2>
 
-        <p style="color:var(--text-dim); margin-bottom:12px;">
-          Comparative index growth across selected observation milestones.
+        <h2>6. Historical Multi-Decadal Progression</h2>
+
+        <p style="color:var(--text-dim);margin-bottom:12px;">
+          Comparative index across selected observation milestones.
         </p>
 
         <div style="
@@ -518,7 +525,7 @@ function renderFeatureTab(tabId) {
         ">
 
           <svg viewBox="0 0 600 220"
-            style="width:100%; height:200px; overflow:visible;">
+            style="width:100%;height:200px;overflow:visible;">
 
             <line x1="40" y1="30" x2="560" y2="30"
               stroke="rgba(255,255,255,0.08)"
@@ -548,12 +555,13 @@ function renderFeatureTab(tabId) {
               stroke-width="3"
               points="${points}"/>
 
-            ${ev.timeline.map((t, idx) => {
+            ${timeline.map((t, idx) => {
 
               const x = 50 + idx * 130;
               const y = 180 - (t.val / 100) * 130;
 
               return `
+
                 <g>
 
                   <circle cx="${x}" cy="${y}" r="6"
@@ -577,6 +585,7 @@ function renderFeatureTab(tabId) {
                   </text>
 
                 </g>
+
               `;
 
             }).join("")}
@@ -587,11 +596,11 @@ function renderFeatureTab(tabId) {
 
         <div class="card-grid" style="margin-top:16px;">
 
-          ${ev.timeline.map(t => `
-            <div class="data-box"
-              style="padding:12px; text-align:center;">
+          ${timeline.map(t => `
 
-              <span style="font-size:0.75rem; color:var(--text-dim);">
+            <div class="data-box" style="padding:12px;text-align:center;">
+
+              <span style="font-size:0.75rem;color:var(--text-dim);">
                 ${t.year} Milestone
               </span>
 
@@ -605,6 +614,7 @@ function renderFeatureTab(tabId) {
               </div>
 
             </div>
+
           `).join("")}
 
         </div>
@@ -614,12 +624,12 @@ function renderFeatureTab(tabId) {
     }
 
     // --------------------------------------
-    // TAB 7 - SEASONAL EARTH
+    // TAB 7 - SEASONAL DYNAMICS
     // --------------------------------------
 
     case "f7": {
 
-      const seasonData = {
+      const seasons = {
 
         spring: {
           title: "Spring (Vernal Equinox)",
@@ -649,36 +659,31 @@ function renderFeatureTab(tabId) {
           color: "#38bdf8"
         }
 
-      }[currentSeason];
+      };
+
+      const seasonData = seasons[currentSeason];
 
       viewport.innerHTML = `
+
         <h2>7. Seasonal Earth Dynamics & Albedo Shift</h2>
 
-        <p style="color:var(--text-dim); margin-bottom:16px;">
+        <p style="color:var(--text-dim);margin-bottom:16px;">
           How Earth's 23.5° axial tilt transforms planetary reflectance.
         </p>
 
         <div class="season-selector">
 
           <button class="season-btn ${currentSeason === "spring" ? "active" : ""}"
-            onclick="setSeasonView('spring')">
-            🌱 Spring
-          </button>
+            data-season="spring">🌱 Spring</button>
 
           <button class="season-btn ${currentSeason === "summer" ? "active" : ""}"
-            onclick="setSeasonView('summer')">
-            ☀️ Summer
-          </button>
+            data-season="summer">☀️ Summer</button>
 
           <button class="season-btn ${currentSeason === "autumn" ? "active" : ""}"
-            onclick="setSeasonView('autumn')">
-            🍂 Autumn
-          </button>
+            data-season="autumn">🍂 Autumn</button>
 
           <button class="season-btn ${currentSeason === "winter" ? "active" : ""}"
-            onclick="setSeasonView('winter')">
-            ❄️ Winter
-          </button>
+            data-season="winter">❄️ Winter</button>
 
         </div>
 
@@ -698,7 +703,7 @@ function renderFeatureTab(tabId) {
 
           <button id="btn-speak-season"
             class="primary-btn"
-            style="margin-bottom:16px; font-size:0.85rem; padding:10px 20px;">
+            style="margin-bottom:16px;font-size:0.85rem;padding:10px 20px;">
             🔊 Listen to Seasonal Narration
           </button>
 
@@ -706,16 +711,14 @@ function renderFeatureTab(tabId) {
 
             <div class="data-box">
               <h4>ALBEDO STATUS</h4>
-
-              <div style="font-size:0.95rem; color:var(--cyan); margin-top:6px;">
+              <div style="font-size:0.95rem;color:var(--cyan);margin-top:6px;">
                 ${seasonData.albedo}
               </div>
             </div>
 
             <div class="data-box">
               <h4>SATELLITE</h4>
-
-              <div style="font-size:0.95rem; color:#fff; margin-top:6px;">
+              <div style="font-size:0.95rem;color:#fff;margin-top:6px;">
                 MODIS & VIIRS Imaging
               </div>
             </div>
@@ -725,17 +728,22 @@ function renderFeatureTab(tabId) {
         </div>
       `;
 
-      const speakBtn = document.getElementById("btn-speak-season");
+      viewport.querySelectorAll("[data-season]").forEach(button => {
 
-      if (speakBtn) {
-        speakBtn.addEventListener("click", () => {
+        button.addEventListener("click", () => {
+          window.setSeasonView(button.dataset.season);
+        });
+
+      });
+
+      document.getElementById("btn-speak-season")
+        ?.addEventListener("click", () => {
 
           window.speakText?.(
             `${seasonData.title}. ${seasonData.desc}`
           );
 
         });
-      }
 
       break;
     }
@@ -748,6 +756,160 @@ function renderFeatureTab(tabId) {
       `;
 
   }
+}
+
+// ==========================================
+// TAB 8 - NASA EIC LIBRARY
+// ==========================================
+
+function renderEICLibrary(viewport) {
+
+  if (!Array.isArray(eicResources)) {
+
+    viewport.innerHTML = `
+      <h2>NASA EIC Library unavailable</h2>
+      <p>Check eic-resources.js.</p>
+    `;
+
+    return;
+  }
+
+  viewport.innerHTML = `
+
+    <div class="eic-library">
+
+      <span class="badge">
+        NASA SCIENTIFIC VISUALIZATION ARCHIVE
+      </span>
+
+      <h2>8. NASA Earth Information Center Library</h2>
+
+      <p style="
+        color:var(--text-dim);
+        line-height:1.7;
+        margin:12px 0 22px;
+      ">
+        Explore NASA Earth observation visualizations.
+        Discover how satellites and scientific missions help us
+        understand our changing planet. Select a resource to visit
+        its NASA visualization or preview our experimental sound concept.
+      </p>
+
+      <div class="card-grid">
+
+        ${eicResources.map((resource, index) => `
+
+          <div class="data-box eic-resource-card"
+            style="padding:20px;">
+
+            <span style="
+              color:var(--cyan);
+              font-size:0.75rem;
+              font-weight:bold;
+              letter-spacing:1px;
+            ">
+              RESOURCE ${String(index + 1).padStart(2, "0")}
+              • ${resource.category}
+            </span>
+
+            <h3 style="margin:12px 0 8px;">
+              ${resource.title}
+            </h3>
+
+            <p style="
+              color:var(--text-dim);
+              font-size:0.85rem;
+              line-height:1.6;
+              margin-bottom:10px;
+            ">
+              ${resource.description}
+            </p>
+
+            <p style="
+              color:var(--yellow);
+              font-size:0.8rem;
+              margin-bottom:12px;
+            ">
+              ${resource.period}
+            </p>
+
+            <div style="
+              border-left:2px solid var(--cyan);
+              padding:9px 12px;
+              margin-bottom:16px;
+              background:rgba(0,255,204,0.05);
+              font-size:0.82rem;
+              line-height:1.5;
+            ">
+              <strong>Our sound concept:</strong><br>
+              ${resource.soundIdea}
+            </div>
+
+            <div style="
+              display:flex;
+              gap:10px;
+              flex-wrap:wrap;
+            ">
+
+              <a
+                href="${resource.url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ghost-btn"
+                style="text-decoration:none;"
+              >
+                Explore NASA ↗
+              </a>
+
+              <button
+                class="ghost-btn eic-sound-btn"
+                data-index="${index}"
+              >
+                ♪ Preview Sound
+              </button>
+
+            </div>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+      <p style="
+        color:var(--text-dim);
+        font-size:0.78rem;
+        margin-top:22px;
+      ">
+        Source: NASA Scientific Visualization Studio.
+        Sound previews are experimental interpretations created
+        by this project, not official NASA audio.
+      </p>
+
+    </div>
+  `;
+
+  const frequencies = [
+    261.63, 293.66, 329.63, 349.23,
+    392.00, 440.00, 493.88, 523.25,
+    587.33, 659.25, 698.46
+  ];
+
+  viewport.querySelectorAll(".eic-sound-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      const index = Number(button.dataset.index);
+      const frequency = frequencies[index];
+
+      if (Number.isFinite(frequency)) {
+        window.playTone?.(frequency);
+      }
+
+    });
+
+  });
+
 }
 
 // ==========================================
@@ -853,6 +1015,7 @@ function renderAstronautCards() {
         <div class="astro-card-front">
 
           <div>
+
             <img
               src="${astro.imgSrc}"
               class="astro-avatar"
@@ -865,13 +1028,14 @@ function renderAstronautCards() {
             <span class="astro-mission">
               ${astro.mission}
             </span>
+
           </div>
 
           <div class="astro-tagline">
             “${astro.tagline}”
           </div>
 
-          <span style="font-size:0.7rem; color:var(--text-dim);">
+          <span style="font-size:0.7rem;color:var(--text-dim);">
             Click to flip card ↺
           </span>
 
@@ -928,20 +1092,17 @@ function renderAstronautCards() {
 // ==========================================
 
 // Flip Card
+
 window.toggleCardFlip = function(event, cardElement) {
 
-  if (
-    event.target.tagName === "BUTTON" ||
-    event.target.closest("button")
-  ) {
-    return;
-  }
+  if (event.target.closest("button")) return;
 
   cardElement.classList.toggle("flipped");
 
 };
 
 // Play Astronaut Tone
+
 window.playAstroSound = function(event, freq) {
 
   event.stopPropagation();
@@ -963,15 +1124,9 @@ window.playAstroSound = function(event, freq) {
 
     osc.type = "sine";
 
-    osc.frequency.setValueAtTime(
-      freq,
-      sCtx.currentTime
-    );
+    osc.frequency.setValueAtTime(freq, sCtx.currentTime);
 
-    gain.gain.setValueAtTime(
-      0.001,
-      sCtx.currentTime
-    );
+    gain.gain.setValueAtTime(0.001, sCtx.currentTime);
 
     gain.gain.exponentialRampToValueAtTime(
       0.12,
@@ -987,20 +1142,20 @@ window.playAstroSound = function(event, freq) {
     gain.connect(sCtx.destination);
 
     osc.start();
-
     osc.stop(sCtx.currentTime + 1.5);
 
     osc.onended = () => sCtx.close();
 
-  } catch (e) {
+  } catch (error) {
 
-    console.error("Astronaut tone playback failed:", e);
+    console.error("Astronaut tone playback failed:", error);
 
   }
 
 };
 
 // Read Astronaut Details
+
 window.speakAstroDetails = function(
   event,
   name,
@@ -1031,7 +1186,8 @@ window.speakAstroDetails = function(
 };
 
 // ==========================================
-// EXPOSE FUNCTIONS FOR OTHER MODULES
+// EXPOSE FUNCTIONS
 // ==========================================
 
 window.renderAstronautCards = renderAstronautCards;
+
